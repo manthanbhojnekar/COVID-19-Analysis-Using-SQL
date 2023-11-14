@@ -1,3 +1,4 @@
+-- Creating tables to export the .csv file into
 CREATE TABLE covid_deaths(
 	iso_code VARCHAR(20),
 	continent VARCHAR(20),
@@ -80,6 +81,7 @@ CREATE TABLE covid_vaccinations(
 
 )
 
+-- Taking a look at data to check if everything was imported successfully
 SELECT * FROM covid_vaccinations
 ORDER BY location, date
 
@@ -91,7 +93,7 @@ ORDER BY location, date
 
 
 -- Looking at total cases vs total deaths
--- Shows likelyhood of dying if you get infected in Canada
+-- Shows the likelihood of dying if you get infected in Canada
 SELECT location, date, total_cases, total_deaths, 
 (CAST(total_deaths AS DECIMAL) / total_cases) * 100 AS death_percent
 FROM covid_deaths
@@ -100,7 +102,7 @@ ORDER BY location, date
 
 
 -- Looking at total cases vs Population
--- Shows the percentage of population that got infected
+-- Shows the percentage of the population that got infected
 SELECT location, date, total_cases, population, 
 (CAST(total_deaths AS DECIMAL) / population) * 100 AS percent_pop_infected
 FROM covid_deaths
@@ -108,7 +110,7 @@ WHERE location = 'Canada'
 ORDER BY location, date 
 
 
--- Countries with highest infection rate compared to population
+-- Countries with the highest infection rate compared to the population
 SELECT location, population, MAX(total_cases) AS highest_infec_count, 
 MAX(CAST(total_cases AS DECIMAL) / population) * 100 AS percent_pop_infected
 FROM covid_deaths
@@ -116,7 +118,7 @@ GROUP BY location, population
 ORDER BY percent_pop_infected DESC
 
 
--- Countries with highest death count
+-- Countries with the highest death count
 SELECT location, MAX(total_deaths) AS highest_death_count 
 FROM covid_deaths
 WHERE continent IS NOT NULL 
@@ -125,7 +127,7 @@ HAVING MAX(total_deaths) IS NOT NULL
 ORDER BY highest_death_count DESC
 
 
--- Continents with highest death count
+-- Continents with the highest death count
 SELECT location, MAX(total_deaths) AS highest_death_count 
 FROM covid_deaths
 WHERE continent IS NULL 
